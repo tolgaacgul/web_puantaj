@@ -1,5 +1,80 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
+<?php
+$host = 'localhost';
+$dbname = 'sendeoyv_sendeoyver';
+$username = 'root';
+$password = 'root';
+try {
+    $db = new PDO('mysql:host = $host; dbname = $dbname; charset=utf8', $username, $password);
+} catch (PDOException $e) {
+    echo $e->getMessage();
+}
+?>
+
+
+
+<?php {
+    $q = $db->prepare('SELECT * FROM `tolsed-puantaj`.`calisma_durumu`');
+    $q->execute();
+    $calisma_durumu = $q->fetchAll(PDO::FETCH_ASSOC);
+} {
+    $q = $db->prepare('SELECT * FROM `tolsed-puantaj`.`calisma_sekli`');
+    $q->execute();
+    $calisma_sekli = $q->fetchAll(PDO::FETCH_ASSOC);
+} {
+    $q = $db->prepare('SELECT * FROM `tolsed-puantaj`.`departman`');
+    $q->execute();
+    $departman = $q->fetchAll(PDO::FETCH_ASSOC);
+} {
+    $q = $db->prepare('SELECT * FROM `tolsed-puantaj`.`isyeri`');
+    $q->execute();
+    $isyeri = $q->fetchAll(PDO::FETCH_ASSOC);
+} {
+    $q = $db->prepare('SELECT * FROM `tolsed-puantaj`.`para_turu`');
+    $q->execute();
+    $para_turu = $q->fetchAll(PDO::FETCH_ASSOC);
+}
+?>
+
+<?php
+if ($_POST['personel_ekle']) {
+
+    $query = 'INSERT INTO `tolsed-puantaj`.`personel` (`ad`, `soyad`, `calisma_durumu_id`, `giris_tarihi`, `cikis_tarihi`, `departman_id`, `isyeri_id`, `e_posta`, `telefon`, `adres`, `calisma_sekli_id`, `gunluk_calisma_saati`, `ucret`, `para_turu_id`, `mesai_carpani`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
+
+    $q = $db->prepare($query);
+    $data = [
+        $_POST['adi'],
+        $_POST['soyadi'],
+        $_POST['calisma_durumu_id'],
+        $_POST['ise_giris_tarihi'],
+        $_POST['isten_cikis_tarihi'],
+        $_POST['personel_departman_id'],
+        $_POST['isyeri_id'],
+        $_POST['e-posta'],
+        $_POST['telefon'],
+        $_POST['adres'],
+        $_POST['calisma_sekli_id'],
+        $_POST['gcsaati'],
+        $_POST['ucret'],
+        $_POST['para_turu_id'],
+        $_POST['mesai_carpani']
+    ];
+
+    $q->execute($data);
+
+    if($q->rowCount()){
+        // echo "Veri tabanı Çalıştı";
+    }else{
+        // echo "Veri tabanında sıkıntı olabilir";
+    }
+
+    
+} else {
+    // echo "Veri tabanı çalışmadı";
+}
+
+?>
 
 <head>
 
@@ -14,9 +89,7 @@
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="css/style.css">
-    <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
     <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
@@ -24,7 +97,6 @@
 </head>
 
 <body id="page-top">
-
     <!-- Page Wrapper -->
     <div id="wrapper">
 
@@ -59,8 +131,7 @@
 
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo2"
-                    aria-expanded="true" aria-controls="collapseTwo2">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo2" aria-expanded="true" aria-controls="collapseTwo2">
                     <i class="fas fa-fw fa-users"></i>
                     <span>Personel İşlemleri</span>
                 </a>
@@ -83,13 +154,11 @@
 
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePuantaj"
-                    aria-expanded="true" aria-controls="collapsePuantaj">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePuantaj" aria-expanded="true" aria-controls="collapsePuantaj">
                     <i class="fas fa-fw fa-users"></i>
                     <span>Puantaj İşlemleri</span>
                 </a>
-                <div id="collapsePuantaj" class="collapse" aria-labelledby="headingTwo2"
-                    data-parent="#accordionSidebar">
+                <div id="collapsePuantaj" class="collapse" aria-labelledby="headingTwo2" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Personel İşlemleri</h6>
                         <a class="collapse-item" href="buttons.html">Puantaj Girişi</a>
@@ -107,8 +176,7 @@
 
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBordro"
-                    aria-expanded="true" aria-controls="collapseBordro">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBordro" aria-expanded="true" aria-controls="collapseBordro">
                     <i class="fas fa-fw fa-users"></i>
                     <span>Bordro İşlemleri</span>
                 </a>
@@ -130,13 +198,11 @@
 
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTanimler"
-                    aria-expanded="true" aria-controls="collapseTanimler">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTanimler" aria-expanded="true" aria-controls="collapseTanimler">
                     <i class="fas fa-fw fa-users"></i>
                     <span>Tanımlar</span>
                 </a>
-                <div id="collapseTanimler" class="collapse" aria-labelledby="headingTwo2"
-                    data-parent="#accordionSidebar">
+                <div id="collapseTanimler" class="collapse" aria-labelledby="headingTwo2" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Tanımlar</h6>
                         <a class="collapse-item" href="isyeri-kaydi.html">İşyeri Kayıtları</a>
@@ -157,13 +223,11 @@
 
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCariIslem"
-                    aria-expanded="true" aria-controls="collapseCariIslem">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCariIslem" aria-expanded="true" aria-controls="collapseCariIslem">
                     <i class="fas fa-fw fa-users"></i>
                     <span>Cari İşlemler</span>
                 </a>
-                <div id="collapseCariIslem" class="collapse" aria-labelledby="headingTwo2"
-                    data-parent="#accordionSidebar">
+                <div id="collapseCariIslem" class="collapse" aria-labelledby="headingTwo2" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Cari İşlemler</h6>
                         <a class="collapse-item" href="buttons.html">Personel Carisi</a>
@@ -185,8 +249,7 @@
 
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseRaporlar"
-                    aria-expanded="true" aria-controls="collapseRaporlar">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseRaporlar" aria-expanded="true" aria-controls="collapseRaporlar">
                     <i class="fas fa-fw fa-users"></i>
                     <span>Raporlar</span>
                 </a>
@@ -217,8 +280,7 @@
 
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-                    aria-expanded="true" aria-controls="collapseTwo">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
                     <i class="fas fa-fw fa-cog"></i>
                     <span>Components</span>
                 </a>
@@ -233,13 +295,11 @@
 
             <!-- Nav Item - Utilities Collapse Menu -->
             <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
-                    aria-expanded="true" aria-controls="collapseUtilities">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true" aria-controls="collapseUtilities">
                     <i class="fas fa-fw fa-wrench"></i>
                     <span>Utilities</span>
                 </a>
-                <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
-                    data-parent="#accordionSidebar">
+                <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Custom Utilities:</h6>
                         <a class="collapse-item" href="utilities-color.html">Colors</a>
@@ -260,8 +320,7 @@
 
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
-                    aria-expanded="true" aria-controls="collapsePages">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true" aria-controls="collapsePages">
                     <i class="fas fa-fw fa-folder"></i>
                     <span>Pages</span>
                 </a>
@@ -328,11 +387,9 @@
                     </button>
 
                     <!-- Topbar Search -->
-                    <form
-                        class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                    <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
                         <div class="input-group">
-                            <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
-                                aria-label="Search" aria-describedby="basic-addon2">
+                            <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
                             <div class="input-group-append">
                                 <button class="btn btn-primary" type="button">
                                     <i class="fas fa-search fa-sm"></i>
@@ -346,18 +403,14 @@
 
                         <!-- Nav Item - Search Dropdown (Visible Only XS) -->
                         <li class="nav-item dropdown no-arrow d-sm-none">
-                            <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-search fa-fw"></i>
                             </a>
                             <!-- Dropdown - Messages -->
-                            <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
-                                aria-labelledby="searchDropdown">
+                            <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in" aria-labelledby="searchDropdown">
                                 <form class="form-inline mr-auto w-100 navbar-search">
                                     <div class="input-group">
-                                        <input type="text" class="form-control bg-light border-0 small"
-                                            placeholder="Search for..." aria-label="Search"
-                                            aria-describedby="basic-addon2">
+                                        <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
                                         <div class="input-group-append">
                                             <button class="btn btn-primary" type="button">
                                                 <i class="fas fa-search fa-sm"></i>
@@ -370,15 +423,13 @@
 
                         <!-- Nav Item - Alerts -->
                         <li class="nav-item dropdown no-arrow mx-1">
-                            <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-bell fa-fw"></i>
                                 <!-- Counter - Alerts -->
                                 <span class="badge badge-danger badge-counter">3+</span>
                             </a>
                             <!-- Dropdown - Alerts -->
-                            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                aria-labelledby="alertsDropdown">
+                            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
                                 <h6 class="dropdown-header">
                                     Alerts Center
                                 </h6>
@@ -421,15 +472,13 @@
 
                         <!-- Nav Item - Messages -->
                         <li class="nav-item dropdown no-arrow mx-1">
-                            <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-envelope fa-fw"></i>
                                 <!-- Counter - Messages -->
                                 <span class="badge badge-danger badge-counter">7</span>
                             </a>
                             <!-- Dropdown - Messages -->
-                            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                aria-labelledby="messagesDropdown">
+                            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="messagesDropdown">
                                 <h6 class="dropdown-header">
                                     Message Center
                                 </h6>
@@ -468,8 +517,7 @@
                                 </a>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="https://source.unsplash.com/Mv9hjnEUHR4/60x60"
-                                            alt="...">
+                                        <img class="rounded-circle" src="https://source.unsplash.com/Mv9hjnEUHR4/60x60" alt="...">
                                         <div class="status-indicator bg-success"></div>
                                     </div>
                                     <div>
@@ -486,14 +534,12 @@
 
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
-                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
                                 <img class="img-profile rounded-circle" src="img/undraw_profile.svg">
                             </a>
                             <!-- Dropdown - User Information -->
-                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                aria-labelledby="userDropdown">
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
                                 <a class="dropdown-item" href="#">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Profile
@@ -522,64 +568,69 @@
                 <!-- Begin Page Content -->
                 <div class="container-fluid sedat">
 
-                    <form action="" class="row">
+                    <form action="personel-kayit.php" method="post" class="row">
                         <div class="col-6">
                             <h3>Personel Bilgileri</h3>
                             <div class="row">
+                                <!--
                                 <div class="col-6 mb-3">
                                     <label for="formGroupExampleInput" class="form-label">İşyeri Kodu</label>
-                                    <input type="" class="form-control" id="formGroupIsyeriKodu" disabled
+                                    <input type="" name="isyeri_kodu" class="form-control" id="formGroupIsyeriKodu" disabled
                                         placeholder="İşyeri Kodu...">
                                 </div>
-                                <div class="col-6 mb-3">
+                                -->
+                                <div class="col-12 mb-3">
                                     <label for="formGroupExampleInput2" class="form-label">İşyeri Adı</label>
-                                    <select class="form-select form-control" id="formGroupExampleInput2"
-                                        aria-label="Default select example">
-                                        <option selected value="0"></option>
-                                        <option value="1">Yazar İnşaat</option>
-                                        <option value="2">Çelik İnşaat</option>
+                                    <select class="form-select form-control" id="formGroupExampleInput2" aria-label="Default select example" name="isyeri_id">
+                                        <?php
+                                        foreach ($isyeri as $value) {
+                                            echo '<option value="' . $value['id'] . '">' . $value['adi'] . '</option>';
+                                        }
+                                        ?>
                                     </select>
                                 </div>
+                                <!--
                                 <div class="col-4 mb-3">
                                     <label for="formGroupExampleInput" class="form-label">Personel ID</label>
-                                    <input type="text" class="form-control" id="formGroupExampleInput"
+                                    <input type="text" class="form-control" id="formGroupExampleInput" name="personel_id"
                                         placeholder="Personel ID">
                                 </div>
-                                <div class="col-4 mb-3">
+                                        -->
+                                <div class="col-6 mb-3">
                                     <label for="formGroupExampleInput" class="form-label">Çalışma Durumu</label>
-                                    <select class="form-select form-control" id="formGroupExampleInput2"
-                                        aria-label="Default select example">
-                                        <option selected value="1">Çalışıyor</option>
-                                        <option value="2">Ayrıldı</option>
+                                    <select class="form-select form-control" id="formGroupExampleInput2" aria-label="Default select example" name="calisma_durumu_id">
+                                        <?php
+                                        foreach ($calisma_durumu as $value) {
+                                            echo '<option selected value="' . $value['id'] . '">' . $value['adi'] . '</option>';
+                                        }
+                                        ?>
                                     </select>
                                 </div>
-                                <div class="col-4 mb-3">
+                                <div class="col-6 mb-3">
                                     <label for="formGroupExampleInput2" class="form-label">Personel Departman</label>
-                                    <select class="form-select form-control" id="formGroupExampleInput2"
-                                        aria-label="Default select example">
-                                        <option selected value="1">Kalıpçı</option>
-                                        <option value="2">Demirci</option>
+                                    <select class="form-select form-control" id="formGroupExampleInput2" aria-label="Default select example" name="personel_departman_id">
+                                        <?php
+                                        foreach ($departman as $value) {
+                                            echo '<option selected value="' . $value['id'] . '">' . $value['adi'] . '</option>';
+                                        }
+                                        ?>
                                     </select>
                                 </div>
                                 <div class="col-6 mb-3">
                                     <label for="formGroupExampleInput" class="form-label">Adı</label>
-                                    <input type="text" class="form-control" id="formGroupExampleInput"
-                                        placeholder="Adı">
+                                    <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Adı" name="adi">
                                 </div>
                                 <div class="col-6 mb-3">
                                     <label for="formGroupExampleInput2" class="form-label">Soyadı</label>
-                                    <input type="text" class="form-control" id="formGroupExampleInput2"
-                                        placeholder="Soyadı">
+                                    <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="Soyadı" name="soyadi">
                                 </div>
                                 <div class="col-6 mb-3">
                                     <label for="formGroupExampleInput" class="form-label">İşe Giriş Tarihi</label>
-                                    <input type="text" class="form-control" id="formGroupExampleInput"
-                                        placeholder="İşe Giriş Tarihi">
+                                    <input type="date" class="form-control" id="formGroupExampleInput" placeholder="İşe Giriş Tarihi" name="ise_giris_tarihi">
                                 </div>
                                 <div class="col-6 mb-3">
                                     <label for="formGroupExampleInput2" class="form-label">İşten Çıkış Tarihi</label>
-                                    <input type="text" class="form-control" id="formGroupExampleInput2"
-                                        placeholder="İşten Çıkış Tarihi">
+                                    <input type="date" class="form-control" id="formGroupExampleInput2" placeholder="İşten Çıkış Tarihi" name="isten_cikis_tarihi">
                                 </div>
                             </div>
                         </div>
@@ -588,30 +639,30 @@
                             <div class="row">
                                 <div class="col-4 mb-3">
                                     <label for="formGroupExampleInput2" class="form-label">Çalışma Şekli</label>
-                                    <select class="form-select form-control" id="formGroupExampleInput2"
-                                        aria-label="Default select example">
-                                        <option selected value="1">Aylık</option>
-                                        <option value="2">Günlük</option>
-                                        <option value="3">Saatlik</option>
+                                    <select class="form-select form-control" id="formGroupExampleInput2" aria-label="Default select example" name="calisma_sekli_id">
+                                        <?php
+                                        foreach ($calisma_sekli as $value) {
+                                            echo '<option value="' . $value['id'] . '">' . $value['adi'] . '</option>';
+                                        }
+                                        ?>
                                     </select>
                                 </div>
                                 <div class="col-2 mb-3">
                                     <label for="formGroupExampleInput" class="form-label">G.Ç.S</label>
-                                    <input type="number" min=7.5 step="0.5" value="7.5" max=100 class="form-control"
-                                        id="formGroupIsyeriKodu" placeholder="Çalışma Saati">
+                                    <input type="number" min=7.5 step="0.5" value="7.5" max=100 class="form-control" id="formGroupIsyeriKodu" placeholder="Çalışma Saati" name="gcsaati">
                                 </div>
                                 <div class="col-4 mb-3">
                                     <label for="formGroupExampleInput2" class="form-label">Ücret</label>
-                                    <input type="number" step="0.01" class="form-control" id="formGroupExampleInput2"
-                                        placeholder="Ücret" value="600">
+                                    <input type="number" step="0.01" class="form-control" id="formGroupExampleInput2" placeholder="Ücret" value="600" name="ucret">
                                 </div>
                                 <div class="col-2 mb-3">
                                     <label for="formGroupExampleInput2" class="form-label">Para</label>
-                                    <select class="form-select form-control" id="formGroupExampleInput2"
-                                        aria-label="Default select example">
-                                        <option selected value="1">₺</option>
-                                        <option value="2">$</option>
-                                        <option value="3">€</option>
+                                    <select class="form-select form-control" id="formGroupExampleInput2" aria-label="Default select example" name="para_turu_id">
+                                        <?php
+                                        foreach ($para_turu as $value) {
+                                            echo '<option value="' . $value['id'] . '">' . $value['sembol'] . '</option>';
+                                        }
+                                        ?>
                                     </select>
                                 </div>
 
@@ -625,8 +676,7 @@
                                     <div class="d-flex">
                                         <div class="d-flex justify-content-center align-items-center pr-3">%</div>
                                         <div class="w-100">
-                                            <input type="number" min=0 max=100 class="form-control"
-                                                id="formGroupExampleInput" value="50">
+                                            <input type="number" min=0 max=100 class="form-control" id="formGroupExampleInput" value="50" name="mesai_carpani">
                                         </div>
                                     </div>
                                     <div id="emailHelp" class="form-text">Örn: mesainiz %50 zamlı olduğu durumlarda
@@ -642,26 +692,23 @@
                                 <div class="col-4">
                                     <div class="mb-3 col-12">
                                         <label for="exampleFormControlInput1" class="form-label">E-Posta</label>
-                                        <input type="email" class="form-control" id="exampleFormControlInput1"
-                                            placeholder="ad@fatsa.com">
+                                        <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="ad@fatsa.com" name="e-posta">
                                     </div>
                                     <div class="mb-3 col-12">
                                         <label for="exampleFormControlInput1" class="form-label">Telefon
                                             Numarası</label>
-                                        <input type="tel" class="form-control" id="exampleFormControlInput1"
-                                            placeholder="5333333333">
+                                        <input type="tel" class="form-control" id="exampleFormControlInput1" placeholder="5333333333" name="telefon">
                                     </div>
                                 </div>
                                 <div class="mb-3 col-4">
                                     <label for="exampleFormControlTextarea1" class="form-label">Adresiniz</label>
-                                    <textarea class="form-control" id="exampleFormControlTextarea1" placeholder="Adres"
-                                        rows="4"></textarea>
+                                    <textarea class="form-control" id="exampleFormControlTextarea1" placeholder="Adres" rows="4" name="adres"></textarea>
                                 </div>
 
                             </div>
                         </div>
                         <div class="col-12">
-                            <button class="btn btn-success">
+                            <button class="btn btn-success" type="submit" value="true" name="personel_ekle">
                                 ✓ Kaydet F2
                             </button>
                         </div>
@@ -695,8 +742,7 @@
     </a>
 
     <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
